@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
+from socket import gethostbyname, gethostname
 
 from dotenv import load_dotenv
 
@@ -24,17 +25,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
+DEBUG = False
 
-SECRET_KEY = os.environ.get('SECRET_KEY', default='your secret key')
+ALLOWED_HOSTS = [
+    os.environ.get('CNC_ENVIRONMENT_DOMAIN'),
+    gethostbyname(gethostname()),  # This allows AWS ALB health checks
+]
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ
+# If you're using a custom domain, add it to ALLOWED_HOSTS as well
+if os.environ.get('CNC_CUSTOM_DOMAIN'):
+    ALLOWED_HOSTS.append(os.environ.get('CNC_CUSTOM_DOMAIN'))
 
-ALLOWED_HOSTS = []
-
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+# If you have additional allowed hosts set in an environment variable
+if os.environ.get('ADDITIONAL_ALLOWED_HOSTS'):
+    ALLOWED_HOSTS.extend(os.environ.get('ADDITIONAL_ALLOWED_HOSTS').split(','))
 
 # Application definition
 
