@@ -33,6 +33,8 @@ ALLOWED_HOSTS = [
     os.environ.get('CNC_ENVIRONMENT_DOMAIN'),
 ]
 
+CSRF_TRUSTED_ORIGINS = [f"https://{os.environ.get('CNC_ENVIRONMENT_DOMAIN')}"]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -122,7 +124,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 if not DEBUG:    
