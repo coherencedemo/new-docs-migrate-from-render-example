@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
-from socket import gethostbyname, gethostname
+# from socket import gethostbyname, gethostname
 
 from dotenv import load_dotenv
 
@@ -30,17 +30,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default='your secret key')
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    os.environ.get('CNC_ENVIRONMENT_DOMAIN'),
-    gethostbyname(gethostname()),  # This allows AWS ALB health checks
+os.environ.get('CNC_ENVIRONMENT_DOMAIN'),
 ]
-
-# If you're using a custom domain, add it to ALLOWED_HOSTS as well
-if os.environ.get('CNC_CUSTOM_DOMAIN'):
-    ALLOWED_HOSTS.append(os.environ.get('CNC_CUSTOM_DOMAIN'))
-
-# If you have additional allowed hosts set in an environment variable
-if os.environ.get('ADDITIONAL_ALLOWED_HOSTS'):
-    ALLOWED_HOSTS.extend(os.environ.get('ADDITIONAL_ALLOWED_HOSTS').split(','))
 
 # Application definition
 
